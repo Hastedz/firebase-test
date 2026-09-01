@@ -1,9 +1,27 @@
 import{View, Text, TextInput, Button, Alert} from 'react-native'
 import { useState } from 'react'
 
-export default function Login(){
+import { entrar } from '../services/auth'
+
+export default function Login(navigation){
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+
+    async function realizarLogin() {
+        if(!email || !senha){
+            alert('Preencha todos os campos!')
+            retrun
+        }
+
+        try {
+            await entrar(email, senha)
+            navigation.navigate('Home')
+        } catch(error){
+            alert('Email ou senha incorretos')
+            console.log(error)
+        }
+    }
+
     return(
         <View>
             <Text>LOGIN</Text>
@@ -21,9 +39,15 @@ export default function Login(){
                 onChangeText={setSenha}
                 secureTextEntry
             />
+
             <Button
                 title='Acessar'
-                onPress={()=>alert('Login em construção')}
+                onPress={realizarLogin}
+            
+            />
+            <Button
+                title='Criar Conta'
+                onPress={()=>navigation.navigate('Cadastro  ')}
             
             />
         </View>
